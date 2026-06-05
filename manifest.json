@@ -1,0 +1,24 @@
+{
+  "name": "Gia's Admin",
+  "short_name": "Gia's",
+  "description": "Panel de pedidos Gia's",
+  "start_url": "/admin.html",
+  "display": "standalone",
+  "background_color": "#FDF8F3",
+  "theme_color": "#2C1A1A",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
