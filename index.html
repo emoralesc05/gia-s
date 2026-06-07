@@ -1,0 +1,1247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gia's — Dulcería & Café</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cream: #FDF8F3;
+    --blush: #F5E6E0;
+    --rose: #E8C5BA;
+    --mauve: #C9A09A;
+    --deep: #2C1A1A;
+    --text: #3D2B2B;
+    --muted: #8C6E6E;
+    --white: #FFFFFF;
+    --card-bg: #FFFAF7;
+    --border: rgba(201,160,154,0.25);
+  }
+
+
+  /* INTRO ANIMATION */
+  .intro-overlay {
+    position: fixed; inset: 0; z-index: 999;
+    background: #0A0404;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 2rem;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+  }
+  .intro-overlay.hide { opacity: 0; visibility: hidden; pointer-events: none; }
+
+  .intro-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(56px, 12vw, 96px);
+    font-weight: 300; letter-spacing: 0.2em;
+    color: var(--white);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: introFadeUp 1s ease 0.3s forwards;
+  }
+
+  .intro-sparkles {
+    display: flex; gap: 1.5rem; align-items: center;
+    opacity: 0;
+    animation: introFadeUp 1s ease 0.7s forwards;
+  }
+  .intro-sparkles svg { width: 16px; height: 16px; }
+
+  .intro-sub {
+    font-size: 12px; letter-spacing: 0.4em; text-transform: uppercase;
+    color: var(--rose); opacity: 0;
+    animation: introFadeUp 1s ease 0.9s forwards;
+  }
+
+  .intro-bar {
+    width: 160px; height: 1px;
+    background: rgba(255,255,255,0.1);
+    position: relative; overflow: hidden;
+    opacity: 0;
+    animation: introFadeUp 0.5s ease 1s forwards;
+  }
+  .intro-bar::after {
+    content: ''; position: absolute;
+    top: 0; left: -100%; width: 100%; height: 100%;
+    background: var(--rose);
+    animation: introBar 1.2s ease 1.1s forwards;
+  }
+
+  @keyframes introFadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes introBar {
+    to { left: 0; }
+  }
+
+  /* EXTRA SECTIONS */
+  .extra-section {
+    padding: 5rem 3rem;
+    max-width: 900px; margin: 0 auto;
+  }
+  .extra-section + .extra-section {
+    border-top: 1px solid var(--border);
+  }
+
+  /* PEDIDO PERSONALIZADO */
+  .personalizado-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 3rem; align-items: center;
+    margin-top: 2.5rem;
+  }
+  .personalizado-text p {
+    font-size: 15px; color: var(--muted); line-height: 1.8; margin-bottom: 1rem;
+  }
+  .personalizado-features {
+    display: flex; flex-direction: column; gap: 0.75rem;
+    margin-top: 1.5rem;
+  }
+  .personalizado-feature {
+    display: flex; align-items: center; gap: 12px;
+    font-size: 14px; color: var(--text);
+  }
+  .personalizado-feature::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--rose); flex-shrink: 0;
+  }
+  .personalizado-cta {
+    display: inline-block; margin-top: 2rem;
+    background: var(--deep); color: var(--white);
+    padding: 14px 36px; border-radius: 30px;
+    font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase;
+    text-decoration: none; font-weight: 500; transition: all 0.3s;
+    border: none; cursor: pointer; font-family: 'DM Sans', sans-serif;
+  }
+  .personalizado-cta:hover { background: var(--mauve); }
+
+  .personalizado-visual {
+    background: var(--deep);
+    border-radius: 20px; aspect-ratio: 4/3;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+  .personalizado-visual::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 60% 40%, rgba(232,197,186,0.15) 0%, transparent 70%);
+  }
+  .personalizado-visual svg { width: 80px; height: 80px; stroke: var(--rose); fill: none; stroke-width: 0.8; opacity: 0.7; }
+
+  /* SUGERENCIAS */
+  .sugerencias-form {
+    margin-top: 2.5rem;
+    background: var(--card-bg); border: 1px solid var(--border);
+    border-radius: 20px; padding: 2rem;
+  }
+  .sugerencias-form textarea {
+    width: 100%; padding: 14px 16px;
+    border: 1px solid var(--border); border-radius: 12px;
+    background: var(--white); color: var(--text);
+    font-family: 'DM Sans', sans-serif; font-size: 14px;
+    resize: none; outline: none; line-height: 1.6;
+    transition: border-color 0.2s; min-height: 120px;
+  }
+  .sugerencias-form textarea:focus { border-color: var(--mauve); }
+  .sugerencias-form textarea::placeholder { color: var(--muted); }
+  .sugerencias-row {
+    display: flex; gap: 1rem; margin-top: 1rem; align-items: flex-end;
+  }
+  .sugerencias-row input {
+    flex: 1; padding: 12px 16px;
+    border: 1px solid var(--border); border-radius: 12px;
+    background: var(--white); color: var(--text);
+    font-family: 'DM Sans', sans-serif; font-size: 14px;
+    outline: none; transition: border-color 0.2s;
+  }
+  .sugerencias-row input:focus { border-color: var(--mauve); }
+  .sugerencias-send {
+    padding: 12px 28px; background: var(--deep); color: var(--white);
+    border: none; border-radius: 12px; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; font-size: 13px;
+    letter-spacing: 0.08em; white-space: nowrap;
+    transition: background 0.2s;
+  }
+  .sugerencias-send:hover { background: var(--mauve); }
+  .sugerencias-success {
+    text-align: center; padding: 1.5rem; color: var(--muted); font-size: 14px;
+    display: none;
+  }
+
+  /* FAQ */
+  .faq-list { margin-top: 2.5rem; }
+  .faq-item {
+    border-bottom: 1px solid var(--border);
+  }
+  .faq-question {
+    width: 100%; padding: 1.25rem 0;
+    display: flex; justify-content: space-between; align-items: center;
+    background: none; border: none; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; font-size: 15px;
+    color: var(--text); text-align: left; gap: 1rem;
+    transition: color 0.2s;
+  }
+  .faq-question:hover { color: var(--deep); }
+  .faq-question svg {
+    width: 18px; height: 18px; stroke: var(--mauve);
+    fill: none; stroke-width: 2; flex-shrink: 0;
+    transition: transform 0.3s;
+  }
+  .faq-question.open svg { transform: rotate(180deg); }
+  .faq-answer {
+    max-height: 0; overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  .faq-answer.open { max-height: 300px; }
+  .faq-answer p {
+    font-size: 14px; color: var(--muted); line-height: 1.8;
+    padding-bottom: 1.25rem;
+  }
+
+  .sections-divider {
+    background: var(--deep); height: 1px;
+    max-width: 60px; margin: 0 auto;
+    opacity: 0.15;
+  }
+
+  @media (max-width: 768px) {
+    .personalizado-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .personalizado-visual { display: none; }
+    .extra-section { padding: 3rem 1.5rem; }
+    .sugerencias-row { flex-direction: column; }
+    .sugerencias-send { width: 100%; }
+  }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* NAVBAR */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: var(--deep);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 3rem;
+    height: 64px;
+  }
+
+  .nav-links {
+    display: flex; gap: 2rem; list-style: none;
+    font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .nav-links a { color: rgba(255,255,255,0.7); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--rose); }
+
+  .nav-logo {
+    position: absolute; left: 50%; transform: translateX(-50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; font-weight: 300; letter-spacing: 0.15em;
+    color: var(--white);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .nav-logo .sparkle-svg { width: 14px; height: 14px; }
+
+  .nav-actions { display: flex; align-items: center; gap: 1.5rem; }
+  .cart-btn {
+    background: none; border: 1px solid rgba(255,255,255,0.3);
+    color: var(--white); padding: 8px 20px; border-radius: 20px;
+    font-family: 'DM Sans', sans-serif; font-size: 13px;
+    cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 10px;
+    letter-spacing: 0.05em;
+  }
+  .cart-btn:hover { background: rgba(255,255,255,0.08); border-color: var(--rose); }
+  .cart-icon { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+  .cart-count {
+    background: var(--rose); color: var(--deep);
+    width: 20px; height: 20px; border-radius: 50%;
+    font-size: 11px; font-weight: 500;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  /* HERO */
+  .hero {
+    margin-top: 64px;
+    min-height: 88vh;
+    background: var(--deep);
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse at 60% 50%, rgba(232,197,186,0.12) 0%, transparent 65%),
+                radial-gradient(ellipse at 20% 80%, rgba(201,160,154,0.08) 0%, transparent 50%);
+  }
+
+  .hero-content { text-align: center; z-index: 1; padding: 2rem; }
+
+  .hero-eyebrow {
+    font-size: 12px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--rose); margin-bottom: 1.5rem;
+    display: flex; align-items: center; justify-content: center; gap: 16px;
+  }
+  .hero-eyebrow::before, .hero-eyebrow::after {
+    content: ''; width: 40px; height: 1px; background: var(--rose); opacity: 0.4;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(64px, 10vw, 120px);
+    font-weight: 300; line-height: 0.9;
+    color: var(--white); letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+  .hero-title em { font-style: italic; color: var(--rose); display: block; }
+
+  .hero-sub {
+    font-size: 15px; color: rgba(255,255,255,0.45);
+    letter-spacing: 0.05em; margin-top: 1.5rem; margin-bottom: 3rem;
+  }
+
+  .hero-cta {
+    display: inline-block;
+    background: var(--rose); color: var(--deep);
+    padding: 14px 40px; border-radius: 30px;
+    font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase;
+    text-decoration: none; font-weight: 500;
+    transition: all 0.3s;
+  }
+  .hero-cta:hover { background: var(--white); transform: translateY(-2px); }
+
+  .hero-scroll {
+    position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    color: rgba(255,255,255,0.25); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+  }
+  .scroll-line {
+    width: 1px; height: 40px; background: rgba(255,255,255,0.2);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.2; } 50% { opacity: 0.7; }
+  }
+
+  /* CATEGORIES */
+  .categories {
+    background: var(--blush);
+    padding: 1.25rem 2rem;
+    display: flex; gap: 0.75rem; align-items: center; justify-content: center;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border);
+  }
+  .categories::-webkit-scrollbar { display: none; }
+  .cat-pill {
+    white-space: nowrap;
+    padding: 8px 22px; border-radius: 20px;
+    font-size: 13px; cursor: pointer;
+    border: 1px solid var(--border);
+    background: transparent; color: var(--muted);
+    transition: all 0.2s; font-family: 'DM Sans', sans-serif;
+    letter-spacing: 0.03em;
+  }
+  .cat-pill.active, .cat-pill:hover {
+    background: var(--deep); color: var(--white); border-color: var(--deep);
+  }
+
+  /* MENU */
+  .menu-section {
+    padding: 4rem 3rem;
+    max-width: 1400px; margin: 0 auto;
+  }
+
+  .section-header { text-align: center; margin-bottom: 3rem; }
+  .section-label {
+    font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--mauve); margin-bottom: 0.75rem;
+  }
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 5vw, 52px); font-weight: 300; color: var(--deep);
+  }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .product-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 16px; overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+  .product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 50px rgba(44,26,26,0.1);
+  }
+
+  .product-img {
+    width: 100%; aspect-ratio: 4/3;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+  }
+
+  .product-badge {
+    position: absolute; top: 12px; left: 12px;
+    background: var(--deep); color: var(--white);
+    font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 4px 10px; border-radius: 10px;
+  }
+
+  .product-info { padding: 1.25rem; }
+  .product-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; font-weight: 500; color: var(--deep); margin-bottom: 4px;
+  }
+  .product-desc { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 1rem; }
+  .product-footer { display: flex; align-items: center; justify-content: space-between; }
+  .product-price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 500; color: var(--deep);
+  }
+  .add-btn {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--deep); color: var(--white);
+    border: none; font-size: 22px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s; line-height: 1;
+  }
+  .add-btn:hover { background: var(--mauve); transform: scale(1.1); }
+
+  /* CART SIDEBAR */
+  .cart-overlay {
+    position: fixed; inset: 0; background: rgba(44,26,26,0.5);
+    z-index: 200; opacity: 0; pointer-events: none; transition: opacity 0.3s;
+  }
+  .cart-overlay.open { opacity: 1; pointer-events: all; }
+
+  .cart-sidebar {
+    position: fixed; right: 0; top: 0; bottom: 0;
+    width: 420px; background: var(--cream);
+    z-index: 201; display: flex; flex-direction: column;
+    transform: translateX(100%); transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: -20px 0 60px rgba(44,26,26,0.12);
+  }
+  .cart-sidebar.open { transform: translateX(0); }
+
+  .cart-header {
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--deep);
+  }
+  .cart-header h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 300; color: var(--white);
+    letter-spacing: 0.05em;
+  }
+  .close-btn {
+    background: none; border: none; color: rgba(255,255,255,0.5);
+    font-size: 20px; cursor: pointer; padding: 4px; line-height: 1;
+    transition: color 0.2s;
+  }
+  .close-btn:hover { color: var(--white); }
+
+  .cart-items { flex: 1; overflow-y: auto; padding: 1.5rem 2rem; }
+  .cart-empty {
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: center; height: 100%; gap: 1rem; color: var(--muted); text-align: center;
+  }
+  .empty-bag {
+    width: 48px; height: 48px; stroke: var(--mauve); fill: none; stroke-width: 1.2;
+    opacity: 0.6;
+  }
+
+  .cart-item {
+    display: flex; gap: 1rem; padding: 1rem 0;
+    border-bottom: 1px solid var(--border); align-items: center;
+  }
+  .cart-item-color {
+    width: 44px; height: 44px; border-radius: 10px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .cart-item-info { flex: 1; }
+  .cart-item-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px; font-weight: 500; color: var(--deep);
+  }
+  .cart-item-price { font-size: 13px; color: var(--muted); }
+  .qty-controls { display: flex; align-items: center; gap: 10px; margin-top: 6px; }
+  .qty-btn {
+    width: 24px; height: 24px; border-radius: 50%;
+    border: 1px solid var(--border); background: none;
+    cursor: pointer; font-size: 14px; color: var(--deep);
+    display: flex; align-items: center; justify-content: center; transition: all 0.2s;
+  }
+  .qty-btn:hover { background: var(--deep); color: var(--white); }
+  .qty-num { font-size: 14px; font-weight: 500; min-width: 16px; text-align: center; }
+  .remove-item {
+    background: none; border: none; color: var(--mauve);
+    font-size: 16px; cursor: pointer; padding: 4px; transition: color 0.2s; line-height: 1;
+  }
+  .remove-item:hover { color: #a03030; }
+
+  .cart-footer {
+    padding: 1.5rem 2rem; border-top: 1px solid var(--border); background: var(--card-bg);
+  }
+  .cart-total {
+    display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1.25rem;
+  }
+  .cart-total-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+  .cart-total-amount {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; font-weight: 500; color: var(--deep);
+  }
+  .reserve-btn {
+    width: 100%; padding: 16px;
+    background: var(--deep); color: var(--white);
+    border: none; border-radius: 30px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase;
+    cursor: pointer; transition: all 0.3s;
+  }
+  .reserve-btn:hover { background: var(--mauve); }
+  .reserve-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed; inset: 0; background: rgba(44,26,26,0.6);
+    z-index: 300; display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s; padding: 1rem;
+  }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+  .modal {
+    background: var(--cream); border-radius: 20px;
+    width: 100%; max-width: 480px; padding: 2.5rem; position: relative;
+    transform: scale(0.96); transition: transform 0.3s;
+  }
+  .modal-overlay.open .modal { transform: scale(1); }
+
+  .modal-close {
+    position: absolute; top: 1.5rem; right: 1.5rem;
+    background: none; border: none; font-size: 20px;
+    color: var(--muted); cursor: pointer; line-height: 1;
+  }
+
+  .modal-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32px; font-weight: 300; color: var(--deep); margin-bottom: 0.5rem;
+  }
+  .modal-sub { font-size: 14px; color: var(--muted); margin-bottom: 2rem; line-height: 1.6; }
+
+  .form-group { margin-bottom: 1.25rem; }
+  .form-label {
+    display: block; font-size: 11px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 8px;
+  }
+  .form-input {
+    width: 100%; padding: 12px 16px;
+    border: 1px solid var(--border); border-radius: 10px;
+    background: var(--white); color: var(--deep);
+    font-family: 'DM Sans', sans-serif; font-size: 15px;
+    transition: border-color 0.2s; outline: none;
+  }
+  .form-input:focus { border-color: var(--mauve); }
+
+
+
+  .order-summary-mini {
+    background: var(--blush); border-radius: 12px; padding: 1rem; margin-bottom: 1.5rem;
+  }
+  .order-summary-mini h4 {
+    font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 10px;
+  }
+  .order-mini-item {
+    display: flex; justify-content: space-between; font-size: 14px; color: var(--text); padding: 3px 0;
+  }
+  .order-mini-total {
+    display: flex; justify-content: space-between; font-weight: 500; color: var(--deep);
+    border-top: 1px solid var(--border); margin-top: 8px; padding-top: 8px;
+  }
+
+  .confirm-btn {
+    width: 100%; padding: 16px;
+    background: var(--deep); color: var(--white);
+    border: none; border-radius: 30px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase;
+    cursor: pointer; transition: all 0.3s;
+  }
+  .confirm-btn:hover { background: var(--mauve); }
+
+  /* SUCCESS */
+  .success-state { text-align: center; padding: 1rem 0; }
+  .success-check {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: var(--blush); display: flex; align-items: center;
+    justify-content: center; margin: 0 auto 1.5rem;
+  }
+  .success-check svg { width: 28px; height: 28px; stroke: var(--mauve); fill: none; stroke-width: 2; }
+  .success-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px; color: var(--deep); margin-bottom: 0.75rem;
+  }
+  .success-msg { font-size: 14px; color: var(--muted); line-height: 1.6; }
+  .status-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 18px; border-radius: 20px; font-size: 13px; margin-top: 1.5rem;
+    background: #FFF9EC; color: #8A6A10;
+    border: 1px solid rgba(200,160,30,0.25);
+  }
+  .status-dot {
+    width: 7px; height: 7px; border-radius: 50%; background: #D4A820;
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+  /* FOOTER */
+  footer {
+    background: var(--deep); color: rgba(255,255,255,0.4);
+    text-align: center; padding: 2rem; font-size: 13px;
+    margin-top: 4rem; letter-spacing: 0.05em;
+  }
+  footer span { color: var(--rose); }
+
+  /* TOAST */
+  .toast {
+    position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(16px);
+    background: var(--deep); color: var(--white);
+    padding: 12px 28px; border-radius: 30px; font-size: 13px;
+    z-index: 500; opacity: 0; transition: all 0.3s; white-space: nowrap;
+    letter-spacing: 0.03em;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  @media (max-width: 768px) {
+    nav { padding: 0 1.25rem; }
+    .nav-links { display: none; }
+    .nav-logo { font-size: 22px; position: static; transform: none; }
+    .nav-actions { margin-left: auto; }
+
+    .hero { min-height: 75vh; }
+    .hero-title { font-size: clamp(48px, 14vw, 80px); }
+    .hero-sub { font-size: 13px; margin-bottom: 2rem; }
+    .hero-cta { padding: 12px 32px; font-size: 12px; }
+
+    .categories { padding: 1rem; gap: 0.5rem; }
+    .cat-pill { padding: 7px 16px; font-size: 12px; }
+
+    .menu-section { padding: 2.5rem 1.25rem; }
+    .products-grid { grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 1rem; }
+    .product-name { font-size: 17px; }
+    .product-desc { font-size: 12px; }
+    .product-img { aspect-ratio: 1; }
+
+    .cart-sidebar { width: 100%; }
+    .cart-header { padding: 1.25rem 1.5rem; }
+    .cart-items { padding: 1rem 1.5rem; }
+    .cart-footer { padding: 1.25rem 1.5rem; }
+
+    .modal { padding: 1.75rem 1.5rem; border-radius: 16px; }
+    .modal-title { font-size: 26px; }
+    .modal-sub { font-size: 13px; }
+
+    .section-title { font-size: clamp(28px, 7vw, 40px); }
+    footer { padding: 1.5rem 1rem; }
+  }
+
+  @media (max-width: 400px) {
+    .products-grid { grid-template-columns: 1fr 1fr; }
+    .hero-title { font-size: 44px; }
+    .cart-btn span:not(.cart-count) { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<!-- INTRO ANIMATION -->
+<div class="intro-overlay" id="introOverlay">
+  <div class="intro-sparkles">
+    <svg viewBox="0 0 14 14" fill="#E8C5BA"><path d="M7 0L8.2 5.8L14 7L8.2 8.2L7 14L5.8 8.2L0 7L5.8 5.8Z"/></svg>
+    <svg viewBox="0 0 14 14" fill="rgba(232,197,186,0.4)"><path d="M7 0L8.2 5.8L14 7L8.2 8.2L7 14L5.8 8.2L0 7L5.8 5.8Z"/></svg>
+    <svg viewBox="0 0 14 14" fill="rgba(232,197,186,0.2)"><path d="M7 0L8.2 5.8L14 7L8.2 8.2L7 14L5.8 8.2L0 7L5.8 5.8Z"/></svg>
+  </div>
+  <div class="intro-logo">Gia's</div>
+  <div class="intro-sub">Dulcería & Café</div>
+  <div class="intro-bar"></div>
+</div>
+
+<nav>
+  <ul class="nav-links">
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#menu">Postres</a></li>
+    <li><a href="#menu">Bebidas</a></li>
+  </ul>
+
+  <div class="nav-logo">
+    <svg class="sparkle-svg" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M7 0L8.2 5.8L14 7L8.2 8.2L7 14L5.8 8.2L0 7L5.8 5.8Z" fill="#E8C5BA"/>
+    </svg>
+    Gia's
+    <svg class="sparkle-svg" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M7 0L8.2 5.8L14 7L8.2 8.2L7 14L5.8 8.2L0 7L5.8 5.8Z" fill="#E8C5BA"/>
+    </svg>
+  </div>
+
+  <div class="nav-actions">
+    <button class="cart-btn" onclick="toggleCart()">
+      <svg class="cart-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" stroke-linecap="round" stroke-linejoin="round"/>
+        <line x1="3" y1="6" x2="21" y2="6" stroke-linecap="round"/>
+        <path d="M16 10a4 4 0 01-8 0" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Carrito
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">Dulcería & Café</p>
+    <h1 class="hero-title">
+      Endulza<br>
+      <em>tu día</em>
+    </h1>
+    <p class="hero-sub">Reserva tus favoritos y recógelos cuando quieras</p>
+    <a href="#menu" class="hero-cta">Ver Menú</a>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    scroll
+  </div>
+</section>
+
+<!-- CATEGORIES -->
+<div class="categories" id="menu">
+  <button class="cat-pill active" onclick="filterCat('all', this)">Todos</button>
+  <button class="cat-pill" onclick="filterCat('postres', this)">Postres</button>
+  <button class="cat-pill" onclick="filterCat('dulces', this)">Dulces</button>
+  <button class="cat-pill" onclick="filterCat('bebidas', this)">Bebidas</button>
+  <button class="cat-pill" onclick="filterCat('especiales', this)">Especiales</button>
+</div>
+
+<!-- MENU -->
+<section class="menu-section">
+  <div class="section-header">
+    <p class="section-label">Lo que tenemos para ti</p>
+    <h2 class="section-title">Nuestro Menú</h2>
+  </div>
+  <div class="products-grid" id="productsGrid"></div>
+</section>
+
+
+<!-- PEDIDO PERSONALIZADO -->
+<section class="extra-section" id="personalizado">
+  <div class="section-header">
+    <p class="section-label">Hecho a tu medida</p>
+    <h2 class="section-title">Pedido Personalizado</h2>
+  </div>
+  <div class="personalizado-grid">
+    <div class="personalizado-text">
+      <p>¿Tienes una ocasión especial? Creamos dulces y postres completamente personalizados para ti — desde tortas de cumpleaños hasta cajas de regalo únicas.</p>
+      <p>Cuéntanos tu idea y la hacemos realidad con los mejores ingredientes.</p>
+      <div class="personalizado-features">
+        <div class="personalizado-feature">Tortas y pasteles para ocasiones especiales</div>
+        <div class="personalizado-feature">Cajas de regalo personalizadas</div>
+        <div class="personalizado-feature">Sabores y decoraciones a tu elección</div>
+        <div class="personalizado-feature">Pedidos con anticipación de 48 horas</div>
+      </div>
+      <a href="https://wa.me/14155238886?text=Hola%20Gia's!%20Quiero%20hacer%20un%20pedido%20personalizado" target="_blank" class="personalizado-cta">Consultar por WhatsApp</a>
+    </div>
+    <div class="personalizado-visual">
+      <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <rect x="20" y="60" width="80" height="40" rx="4"/>
+        <rect x="30" y="35" width="60" height="28" rx="4"/>
+        <rect x="40" y="15" width="40" height="22" rx="4"/>
+        <line x1="60" y1="60" x2="60" y2="35"/>
+        <line x1="60" y1="35" x2="60" y2="15"/>
+        <circle cx="60" cy="12" r="4"/>
+        <line x1="20" y1="60" x2="100" y2="60"/>
+        <line x1="30" y1="35" x2="90" y2="35"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- SUGERENCIAS -->
+<section class="extra-section" id="sugerencias" style="background: var(--blush);">
+  <div class="section-header">
+    <p class="section-label">Tu opinión nos importa</p>
+    <h2 class="section-title">Sugerencias</h2>
+  </div>
+  <div class="sugerencias-form" id="sugerenciasForm">
+    <textarea id="sugerenciaTexto" placeholder="Cuéntanos qué producto te gustaría ver, qué podemos mejorar o simplemente deja un comentario..."></textarea>
+    <div class="sugerencias-row">
+      <input type="text" id="sugerenciaNombre" placeholder="Tu nombre (opcional)">
+      <button class="sugerencias-send" onclick="enviarSugerencia()">Enviar</button>
+    </div>
+  </div>
+  <div class="sugerencias-success" id="sugerenciasSuccess">
+    <p style="font-size:16px; color:var(--deep); margin-bottom:8px;">Gracias por tu sugerencia</p>
+    <p>La tendremos en cuenta para seguir mejorando.</p>
+  </div>
+</section>
+
+<!-- PREGUNTAS FRECUENTES -->
+<section class="extra-section" id="faq">
+  <div class="section-header">
+    <p class="section-label">Resolvemos tus dudas</p>
+    <h2 class="section-title">Preguntas Frecuentes</h2>
+  </div>
+  <div class="faq-list">
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span>Como funciona el sistema de reservas?</span>
+        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-answer">
+        <p>Agrega los productos que deseas al carrito, ingresa tu nombre y numero de WhatsApp y confirma tu pedido. Te llegara un mensaje automatico para confirmar tu reserva respondiendo SI o NO.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span>Hay metodo de pago en linea?</span>
+        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-answer">
+        <p>Por el momento el pago se realiza al momento de retirar tu pedido en nuestro local. No manejamos pagos en linea.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span>Con cuanta anticipacion debo hacer mi reserva?</span>
+        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-answer">
+        <p>Para productos del menu regular puedes reservar el mismo dia. Para pedidos personalizados necesitamos al menos 48 horas de anticipacion.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span>Puedo cancelar mi pedido?</span>
+        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-answer">
+        <p>Si, puedes cancelar respondiendo NO al mensaje de confirmacion de WhatsApp antes de que tu pedido este listo.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        <span>Los productos son artesanales?</span>
+        <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="faq-answer">
+        <p>Si, todos nuestros productos son elaborados de forma artesanal con ingredientes frescos y de calidad.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 <span>Gia's</span> — Dulcería & Café</p>
+</footer>
+
+<!-- CART OVERLAY -->
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+
+<!-- CART SIDEBAR -->
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header">
+    <h2>Tu Carrito</h2>
+    <button class="close-btn" onclick="toggleCart()">&#x2715;</button>
+  </div>
+  <div class="cart-items" id="cartItems">
+    <div class="cart-empty">
+      <svg class="empty-bag" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 4L6 12v28a4 4 0 004 4h28a4 4 0 004-4V12l-6-8z" stroke-linecap="round" stroke-linejoin="round"/>
+        <line x1="6" y1="12" x2="42" y2="12" stroke-linecap="round"/>
+        <path d="M32 20a8 8 0 01-16 0" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <p style="font-size:15px; color: var(--text);">Tu carrito está vacío</p>
+      <p style="font-size:13px;">Agrega algo delicioso</p>
+    </div>
+  </div>
+  <div class="cart-footer">
+    <div class="cart-total">
+      <span class="cart-total-label">Total</span>
+      <span class="cart-total-amount" id="cartTotal">$0.00</span>
+    </div>
+    <button class="reserve-btn" id="reserveBtn" onclick="openModal()" disabled>
+      Reservar Pedido
+    </button>
+  </div>
+</div>
+
+<!-- ORDER MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div id="modalContent">
+      <button class="modal-close" onclick="closeModal()">&#x2715;</button>
+      <h2 class="modal-title">Confirmar Reserva</h2>
+      <p class="modal-sub">Ingresa tus datos y te enviaremos un mensaje para confirmar tu pedido.</p>
+      <div class="form-group">
+        <label class="form-label">Tu nombre</label>
+        <input type="text" class="form-input" id="clientName" placeholder="Ej: Maria Garcia">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Numero de WhatsApp</label>
+        <input type="text" class="form-input" id="contactInput" placeholder="0969 999 9999">
+      </div>
+      <div class="order-summary-mini" id="orderSummaryMini"></div>
+      <button class="confirm-btn" onclick="submitOrder()">Enviar por WhatsApp</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBsTW5ZyPkshQG6E_ZRisMeo3vxft4TuL8",
+  authDomain: "gia-s-830e9.firebaseapp.com",
+  projectId: "gia-s-830e9",
+  storageBucket: "gia-s-830e9.firebasestorage.app",
+  messagingSenderId: "695351178205",
+  appId: "1:695351178205:web:6b269da32caaaf1f763c34"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const CAT_COLORS = {
+  postres: { bg:'#FDF0F5', accent:'#D4888A' },
+  dulces:  { bg:'#FFF4EC', accent:'#C08850' },
+  bebidas: { bg:'#EEF4FD', accent:'#6A8FC0' },
+  especiales: { bg:'#F3F0FD', accent:'#9070C0' },
+};
+
+const CAT_ICONS = {
+  postres: `<svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="{c}" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><rect x="10" y="28" width="36" height="18" rx="3"/><path d="M10 28c0-6 4-12 18-12s18 6 18 12"/><line x1="28" y1="16" x2="28" y2="10"/><circle cx="28" cy="8" r="3"/><line x1="19" y1="36" x2="19" y2="42"/><line x1="28" y1="36" x2="28" y2="42"/><line x1="37" y1="36" x2="37" y2="42"/></svg>`,
+  dulces:  `<svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="{c}" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><rect x="18" y="22" width="20" height="20" rx="10"/><line x1="28" y1="22" x2="28" y2="12"/><line x1="28" y1="12" x2="20" y2="7"/><line x1="28" y1="12" x2="36" y2="7"/><circle cx="28" cy="32" r="4"/></svg>`,
+  bebidas: `<svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="{c}" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M16 14h24l-4 28H20L16 14z"/><path d="M40 20h4a4 4 0 010 8h-4"/><path d="M22 14V10a6 6 0 0112 0v4"/></svg>`,
+  especiales: `<svg width="56" height="56" viewBox="0 0 56 56" fill="none" stroke="{c}" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" xmlns="http://www.w3.org/2000/svg"><path d="M28 10l4 9h9l-7 6 3 9-9-6-9 6 3-9-7-6h9z"/></svg>`,
+};
+
+const products = [
+  { id:1, name:'Brownie de Chocolate', desc:'Humedo por dentro, crocante por fuera. Hecho con cacao premium.', price:2.50, cat:'postres', badge:'Favorito' },
+  { id:2, name:'Cheesecake de Fresa', desc:'Base de galleta con crema suave y coulis de fresa fresca.', price:3.25, cat:'postres', badge:null },
+  { id:3, name:'Macarons Surtidos', desc:'6 unidades en sabores variados: vainilla, rosa, pistache y mas.', price:4.50, cat:'dulces', badge:'Nuevo' },
+  { id:4, name:'Cafe Latte', desc:'Espresso doble con leche cremosa vaporizada. Clasico y reconfortante.', price:2.00, cat:'bebidas', badge:null },
+  { id:5, name:'Trufas Artesanales', desc:'Caja de 4 trufas de chocolate negro, blanco y con leche.', price:3.75, cat:'dulces', badge:null },
+  { id:6, name:'Frappe de Caramelo', desc:'Cafe frio blended con caramelo, crema batida y chips de chocolate.', price:3.00, cat:'bebidas', badge:'Popular' },
+  { id:7, name:'Torta Red Velvet', desc:'Porcion individual con frosting de queso crema.', price:3.50, cat:'postres', badge:null },
+  { id:8, name:'Caja Mixta', desc:'Seleccion especial del dia: 8 piezas de nuestros mejores dulces.', price:6.00, cat:'especiales', badge:'Especial' },
+];
+
+let cart = {};
+let contactType = 'whatsapp';
+
+function getIcon(cat, color) {
+  return (CAT_ICONS[cat] || CAT_ICONS.especiales).replace(/\{c\}/g, color);
+}
+
+function renderProducts(filter = 'all') {
+  const grid = document.getElementById('productsGrid');
+  const filtered = filter === 'all' ? products : products.filter(p => p.cat === filter);
+  grid.innerHTML = filtered.map(p => {
+    const c = CAT_COLORS[p.cat] || CAT_COLORS.especiales;
+    return `
+    <div class="product-card">
+      <div class="product-img" style="background:${c.bg}">
+        ${p.badge ? `<div class="product-badge">${p.badge}</div>` : ''}
+        ${getIcon(p.cat, c.accent)}
+      </div>
+      <div class="product-info">
+        <p class="product-name">${p.name}</p>
+        <p class="product-desc">${p.desc}</p>
+        <div class="product-footer">
+          <span class="product-price">$${p.price.toFixed(2)}</span>
+          <button class="add-btn" onclick="addToCart(${p.id})">+</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function filterCat(cat, btn) {
+  document.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProducts(cat);
+}
+
+function addToCart(id) {
+  cart[id] = (cart[id] || 0) + 1;
+  updateCartUI();
+  showToast('Agregado al carrito');
+}
+
+function removeFromCart(id) {
+  delete cart[id];
+  updateCartUI();
+}
+
+function changeQty(id, delta) {
+  cart[id] = (cart[id] || 0) + delta;
+  if (cart[id] <= 0) delete cart[id];
+  updateCartUI();
+}
+
+function updateCartUI() {
+  const total = Object.entries(cart).reduce((sum, [id, qty]) => {
+    const p = products.find(x => x.id == id);
+    return sum + (p ? p.price * qty : 0);
+  }, 0);
+  const count = Object.values(cart).reduce((a,b)=>a+b, 0);
+
+  document.getElementById('cartCount').textContent = count;
+  document.getElementById('cartTotal').textContent = '$' + total.toFixed(2);
+  document.getElementById('reserveBtn').disabled = count === 0;
+
+  const itemsEl = document.getElementById('cartItems');
+  if (count === 0) {
+    itemsEl.innerHTML = `<div class="cart-empty">
+      <svg class="empty-bag" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 4L6 12v28a4 4 0 004 4h28a4 4 0 004-4V12l-6-8z" stroke-linecap="round" stroke-linejoin="round"/>
+        <line x1="6" y1="12" x2="42" y2="12" stroke-linecap="round"/>
+        <path d="M32 20a8 8 0 01-16 0" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <p style="font-size:15px;color:var(--text)">Tu carrito esta vacio</p>
+      <p style="font-size:13px">Agrega algo delicioso</p>
+    </div>`;
+    return;
+  }
+
+  itemsEl.innerHTML = Object.entries(cart).map(([id, qty]) => {
+    const p = products.find(x => x.id == id);
+    if (!p) return '';
+    const c = CAT_COLORS[p.cat] || CAT_COLORS.especiales;
+    return `<div class="cart-item">
+      <div class="cart-item-color" style="background:${c.bg}">${getIcon(p.cat, c.accent).replace('width="56" height="56"','width="28" height="28"')}</div>
+      <div class="cart-item-info">
+        <p class="cart-item-name">${p.name}</p>
+        <p class="cart-item-price">$${(p.price * qty).toFixed(2)}</p>
+        <div class="qty-controls">
+          <button class="qty-btn" onclick="changeQty(${id},-1)">&#x2212;</button>
+          <span class="qty-num">${qty}</span>
+          <button class="qty-btn" onclick="changeQty(${id},1)">+</button>
+        </div>
+      </div>
+      <button class="remove-item" onclick="removeFromCart(${id})">&#x2715;</button>
+    </div>`;
+  }).join('');
+}
+
+function toggleCart() {
+  document.getElementById('cartSidebar').classList.toggle('open');
+  document.getElementById('cartOverlay').classList.toggle('open');
+}
+
+function openModal() {
+  toggleCart();
+  buildOrderSummary();
+  document.getElementById('modalOverlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+
+function selectContact(type) {
+  contactType = type;
+}
+
+function buildOrderSummary() {
+  const total = Object.entries(cart).reduce((sum, [id, qty]) => {
+    const p = products.find(x => x.id == id);
+    return sum + (p ? p.price * qty : 0);
+  }, 0);
+  const items = Object.entries(cart).map(([id, qty]) => {
+    const p = products.find(x => x.id == id);
+    return `<div class="order-mini-item"><span>${p.name} x${qty}</span><span>$${(p.price*qty).toFixed(2)}</span></div>`;
+  }).join('');
+  document.getElementById('orderSummaryMini').innerHTML = `
+    <h4>Resumen del pedido</h4>${items}
+    <div class="order-mini-total"><span>Total</span><span>$${total.toFixed(2)}</span></div>`;
+}
+
+function normalizarTelefono(numero) {
+  // Quitar todo excepto dígitos
+  let digits = numero.replace(/\D/g, '');
+  // Si empieza con 0 (formato ecuatoriano: 0969...) → reemplazar 0 por 593
+  if (digits.startsWith('0') && digits.length === 10) {
+    digits = '593' + digits.substring(1);
+  }
+  // Si ya tiene 593 al inicio, dejarlo
+  return digits;
+}
+
+async function submitOrder() {
+  const name = document.getElementById('clientName').value.trim();
+  const contact = document.getElementById('contactInput').value.trim();
+  if (!name) { showToast('Por favor ingresa tu nombre'); return; }
+  if (!contact) { showToast('Por favor ingresa tu contacto'); return; }
+
+  const total = Object.entries(cart).reduce((sum, [id, qty]) => {
+    const p = products.find(x => x.id == id);
+    return sum + (p ? p.price * qty : 0);
+  }, 0);
+
+  const items = Object.entries(cart).map(([id, qty]) => {
+    const p = products.find(x => x.id == id);
+    return { nombre: p.name, cantidad: qty, subtotal: parseFloat((p.price * qty).toFixed(2)) };
+  });
+
+  // Guardar en Firebase con estado "sin_confirmar"
+  let pedidoId = null;
+  try {
+    const docRef = await addDoc(collection(db, 'pedidos'), {
+      cliente: name,
+      contacto: contact,
+      tipoContacto: contactType,
+      items: items,
+      total: parseFloat(total.toFixed(2)),
+      estado: 'sin_confirmar',
+      fecha: serverTimestamp()
+    });
+    pedidoId = docRef.id;
+  } catch (e) {
+    console.error('Error guardando pedido:', e);
+  }
+
+  // Abrir WhatsApp
+  const itemsText = items.map(i => `- ${i.nombre} x${i.cantidad} = $${i.subtotal.toFixed(2)}`).join('%0A');
+  const msg = `Hola Gias! Quiero hacer una reserva:%0A%0ANombre: ${encodeURIComponent(name)}%0APedido:%0A${itemsText}%0A%0ATotal: $${total.toFixed(2)}%0A%0APor favor confirma mi reserva.`;
+
+  // Llamar al backend para enviar mensaje automatico
+  try {
+    await fetch('https://gia-s.onrender.com/nuevo-pedido', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        pedidoId: pedidoId,
+        cliente: name,
+        contacto: normalizarTelefono(contact),
+        items: items,
+        total: total
+      })
+    });
+  } catch(e) {
+    console.error('Error llamando al backend:', e);
+  }
+
+  // Abrir WhatsApp dirigido al número de Twilio sandbox
+  if (contactType === 'whatsapp') {
+    window.open(`https://wa.me/14155238886?text=${msg}`, '_blank');
+  }
+
+  document.getElementById('modalContent').innerHTML = `
+    <div class="success-state">
+      <div class="success-check">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h3 class="success-title">Pedido registrado</h3>
+      <p class="success-msg">WhatsApp se ha abierto con tu pedido listo. Solo presiona <strong>Enviar</strong> para confirmar tu reserva con Gia's.</p>
+      <div class="status-badge">
+        <div class="status-dot"></div>
+        Esperando confirmacion
+      </div>
+      <button style="margin-top:1.5rem;width:100%;padding:14px;background:var(--deep);color:var(--white);border:none;border-radius:30px;font-family:'DM Sans',sans-serif;font-size:13px;letter-spacing:0.1em;text-transform:uppercase;cursor:pointer;" onclick="resetModal()">Hacer otro pedido</button>
+    </div>`;
+
+  cart = {};
+  updateCartUI();
+}
+
+function resetModal() {
+  closeModal();
+  document.getElementById('modalContent').innerHTML = `
+    <button class="modal-close" onclick="closeModal()">&#x2715;</button>
+    <h2 class="modal-title">Confirmar Reserva</h2>
+    <p class="modal-sub">Ingresa tus datos y te enviaremos un mensaje para confirmar tu pedido.</p>
+    <div class="form-group">
+      <label class="form-label">Tu nombre</label>
+      <input type="text" class="form-input" id="clientName" placeholder="Ej: Maria Garcia">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Numero de WhatsApp</label>
+      <input type="text" class="form-input" id="contactInput" placeholder="0969 999 9999">
+    </div>
+    <div class="order-summary-mini" id="orderSummaryMini"></div>
+    <button class="confirm-btn" onclick="submitOrder()">Enviar por WhatsApp</button>`;
+  contactType = 'whatsapp';
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+renderProducts();
+
+// Intro animation
+setTimeout(() => {
+  document.getElementById('introOverlay').classList.add('hide');
+}, 2800);
+
+function toggleFaq(btn) {
+  const answer = btn.nextElementSibling;
+  const isOpen = answer.classList.contains('open');
+  document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('open'));
+  document.querySelectorAll('.faq-question').forEach(b => b.classList.remove('open'));
+  if (!isOpen) {
+    answer.classList.add('open');
+    btn.classList.add('open');
+  }
+}
+
+async function enviarSugerencia() {
+  const texto = document.getElementById('sugerenciaTexto').value.trim();
+  const nombre = document.getElementById('sugerenciaNombre').value.trim();
+  if (!texto) { showToast('Por favor escribe tu sugerencia'); return; }
+
+  try {
+    await addDoc(collection(db, 'sugerencias'), {
+      texto,
+      nombre: nombre || 'Anonimo',
+      fecha: serverTimestamp()
+    });
+    document.getElementById('sugerenciasForm').style.display = 'none';
+    document.getElementById('sugerenciasSuccess').style.display = 'block';
+  } catch(e) {
+    showToast('Error al enviar, intenta de nuevo');
+  }
+}
+
+// Exponer funciones al scope global (necesario para type="module")
+window.filterCat = filterCat;
+window.addToCart = addToCart;
+window.removeFromCart = removeFromCart;
+window.changeQty = changeQty;
+window.toggleCart = toggleCart;
+window.openModal = openModal;
+window.closeModal = closeModal;
+window.selectContact = selectContact;
+window.submitOrder = submitOrder;
+window.toggleFaq = toggleFaq;
+window.enviarSugerencia = enviarSugerencia;
+</script>
+</body>
+</html>
