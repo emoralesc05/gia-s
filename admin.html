@@ -249,6 +249,10 @@
   .accion-btn.hecho { background: var(--deep); color: var(--white); border-color: var(--deep); }
   .accion-btn.hecho:hover { background: var(--mauve); }
   .accion-btn.cancelar:hover { background: var(--red-bg); color: var(--red-dot); border-color: var(--red-border); }
+  .accion-btn.restaurar { color: var(--green-dot); border-color: var(--green-border); }
+  .accion-btn.restaurar:hover { background: var(--green-bg); }
+  .accion-btn.eliminar { color: var(--red-dot); border-color: var(--red-border); }
+  .accion-btn.eliminar:hover { background: var(--red-bg); }
 
   /* EMPTY / LOADING */
   .empty-state {
@@ -346,7 +350,7 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, onSnapshot, doc, updateDoc, serverTimestamp, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, onSnapshot, doc, updateDoc, deleteDoc, serverTimestamp, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBsTW5ZyPkshQG6E_ZRisMeo3vxft4TuL8",
@@ -541,11 +545,14 @@ function renderPedidos() {
             <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" stroke-linecap="round" stroke-linejoin="round"/></svg>
             ${p.contacto} (${p.tipoContacto})
           </div>
-          ${mostrarAcciones ? `
           <div class="acciones">
             ${p.estado==='confirmado' ? `<button class="accion-btn hecho" onclick="marcarHecho('${p.id}')">Marcar como hecho</button>` : ''}
             ${p.estado==='sin_confirmar' ? `<button class="accion-btn cancelar" onclick="cancelarPedido('${p.id}')">Cancelar pedido</button>` : ''}
-          </div>` : ''}
+            ${p.estado==='cancelado' ? `
+              <button class="accion-btn restaurar" onclick="restaurarPedido('${p.id}')">Restaurar</button>
+              <button class="accion-btn eliminar" onclick="eliminarPedido('${p.id}')">Eliminar</button>
+            ` : ''}
+          </div>
         </div>
       </div>
     </div>`;
@@ -575,6 +582,21 @@ async function cancelarPedido(id) {
     await updateDoc(doc(db, 'pedidos', id), { estado: 'cancelado', canceladoEn: serverTimestamp() });
     showToast('Pedido cancelado');
   } catch(e) { showToast('Error al actualizar'); }
+}
+
+async function restaurarPedido(id) {
+  try {
+    await updateDoc(doc(db, 'pedidos', id), { estado: 'sin_confirmar', restauradoEn: serverTimestamp() });
+    showToast('Pedido restaurado');
+  } catch(e) { showToast('Error al restaurar'); }
+}
+
+async function eliminarPedido(id) {
+  if (!confirm('Seguro que deseas eliminar este pedido? Esta accion no se puede deshacer.')) return;
+  try {
+    await deleteDoc(doc(db, 'pedidos', id));
+    showToast('Pedido eliminado');
+  } catch(e) { showToast('Error al eliminar'); }
 }
 
 function cambiarTab(tab, btn) {
@@ -618,6 +640,8 @@ window.toggleProducto = toggleProducto;
 window.togglePedido = togglePedido;
 window.marcarHecho = marcarHecho;
 window.cancelarPedido = cancelarPedido;
+window.restaurarPedido = restaurarPedido;
+window.eliminarPedido = eliminarPedido;
 window.cambiarTab = cambiarTab;
 window.solicitarNotificaciones = solicitarNotificaciones;
 window.cerrarBanner = cerrarBanner;
