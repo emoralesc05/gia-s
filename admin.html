@@ -346,7 +346,7 @@
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getFirestore, collection, onSnapshot, doc, updateDoc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, collection, onSnapshot, doc, updateDoc, serverTimestamp, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBsTW5ZyPkshQG6E_ZRisMeo3vxft4TuL8",
@@ -363,11 +363,13 @@ const db = getFirestore(app);
 let todosLosPedidos = [];
 let primeraVez = true;
 
-const q = query(collection(db, 'pedidos'), orderBy('fecha', 'desc'));
-onSnapshot(q, (snapshot) => {
-  const nuevos = [];
-  snapshot.forEach(d => nuevos.push({ id: d.id, ...d.data() }));
+// Limitar a últimos 50 pedidos para no sobrecargar
+const q = query(collection(db, 'pedidos'), orderBy('fecha', 'desc'), limit(50));
 
+let renderTimeout = null;
+
+onSnapshot(q, (snapshot) => {
+  // Solo procesar cambios reales
   if (!primeraVez) {
     snapshot.docChanges().forEach(change => {
       if (change.type === 'added') {
@@ -382,11 +384,19 @@ onSnapshot(q, (snapshot) => {
       }
     });
   }
+
+  const nuevos = [];
+  snapshot.forEach(d => nuevos.push({ id: d.id, ...d.data() }));
   primeraVez = false;
   todosLosPedidos = nuevos;
   actualizarStats();
-  renderProductos();
-  renderPedidos();
+
+  // Debounce: evitar re-renders múltiples en rafaga
+  clearTimeout(renderTimeout);
+  renderTimeout = setTimeout(() => {
+    renderProductos();
+    renderPedidos();
+  }, 300);
 });
 
 function actualizarStats() {
